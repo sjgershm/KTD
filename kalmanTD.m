@@ -21,7 +21,7 @@ function model = kalmanTD(X,r,param)
     for n = 1:N
         
         Q = param.q(n)*eye(D); % transition covariance
-        h = g*X(n+1,:) - X(n,:);    % temporal difference features
+        h = X(n,:) - g*X(n+1,:);    % temporal difference features
         rhat = h*w;
         dt = r(n) - rhat;            % prediction error
         C = C + Q;                  % a priori covariance
