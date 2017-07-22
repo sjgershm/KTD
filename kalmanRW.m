@@ -10,9 +10,11 @@ function model = kalmanRW(X,r,param)
     if nargin < 3 || isempty(param); param = KTD_defparam; end
     C = param.c*eye(D); % prior covariance
     s = param.s;        % noise variance
-    Q = param.q*eye(D); % transition covariance
+    q = param.q;        % transition variance
+    I = eye(D);
     
     if length(s)==1; s = zeros(N,1)+s; end
+    if length(q)==1; q = zeros(N,1)+q; end
     if length(param.lr)==1; param.lr = zeros(N,1)+param.lr; end
     
     % run Kalman filter
@@ -20,8 +22,8 @@ function model = kalmanRW(X,r,param)
         
         h = X(n,:);
         rhat = h*w;
-        dt = r(n) - rhat;            % prediction error
-        C = C + Q;                  % a priori covariance
+        dt = r(n) - rhat;           % prediction error
+        C = C + q(n)*I;             % a priori covariance
         P = h*C*h'+s(n);            % residual covariance
         K = C*h'/P;                 % Kalman gain
         w0 = w;
