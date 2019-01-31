@@ -675,5 +675,49 @@ function results = KTD_sim(sim,param)
                 results(j).W = W;
             end
             
+        case 20
+            % simultaneous vs. sequential unovershadowing
+            
+            nTrials = 10;
+            param.q = 0.5;
+            
+            % x = [A,B]
+            
+            % AB+
+            x1 = [1 1];
+            r1 = 1;
+            
+            % A-
+            x2 = [1 0];
+            r2 = 0;
+            
+            % B-
+            x3 = [0 1];
+            r3 = 0;
+            
+            % A->B+
+            x4 = [1 0; 0 1];
+            r4 = [0; 1];
+            
+            % AB+ / B-
+            F{1} = [repmat(x1,nTrials,1); x3];
+            R{1} = [repmat(r1,nTrials,1); r3];
+            
+            % AB+ / A- / B-
+            F{2} = [repmat(x1,nTrials,1); repmat(x2,nTrials,1); x3];
+            R{2} = [repmat(r1,nTrials,1); repmat(r2,nTrials,1); r3];
+            
+            % A->B+ / B-
+            F{3} = [repmat(x4,nTrials,1); x3];
+            R{3} = [repmat(r4,nTrials,1); r3];
+            
+            % A->B+ / A- / B-
+            F{4} = [repmat(x4,nTrials,1); repmat(x2,nTrials,1); x3];
+            R{4} = [repmat(r4,nTrials,1); repmat(r2,nTrials,1); r3];
+            
+            for j = 1:length(F)
+                results(j).model = kalmanTD(F{j},R{j},param);
+            end
+            
     end
     

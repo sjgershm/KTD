@@ -250,4 +250,15 @@ function KTD_plot(mode)
             end
             set(gcf,'Position',[200 200 800 300]);
             
+        case 'serial_unovershadowing'
+            results = KTD_sim(20);
+            for j=1:length(results)
+                r(j) = results(j).model(end).V;
+            end
+            
+            bar(reshape(r,2,2)')
+            set(gca,'FontSize',25,'XTickLabel',{'Simultaneous' 'Serial'});
+            legend({'Overshadowing' 'Unovershadowing'},'FontSize',25,'Location','NorthEast');
+            ylabel('Value','FontSize',25);
+            
     end

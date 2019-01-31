@@ -20,6 +20,10 @@ function model = kalmanTD(X,r,param)
     % run Kalman filter
     for n = 1:N
         
+        % store results
+        model(n).w = w;
+        model(n).V = X(n,:)*w;
+        
         Q = param.q(n)*eye(D); % transition covariance
         h = X(n,:) - g*X(n+1,:);    % temporal difference features
         rhat = h*w;
@@ -35,9 +39,6 @@ function model = kalmanTD(X,r,param)
         end
         C = C - K*h*C;              % posterior covariance update
         
-        % store results
-        model(n).w = w;
-        model(n).w0 = w0;
         model(n).C = C;
         model(n).K = K;
         model(n).dt = dt;
